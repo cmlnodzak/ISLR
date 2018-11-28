@@ -45,13 +45,31 @@ fit7<-lm(medv~ploy(lstat,4))
 points(lstat,fitted(fit7),col="blue",pch=20)
 plot(1:20,1:20,pch=1:20,cex=2)
 
-# Qualitative predictors
+### Qualitative predictors
 fix(Carseats)
 names(Carseats)
 summary(Carseats)
 fit1<-lm(Sales~.,+Income:Advertising+Age:Price,data=Carseats)
 summary(fit1)
+contrasts(Carseats$ShelveLoc)
 
+### Define an R function
+regplot=function(x,y){
+	fit<-lm(x~y)
+	plot(x,y)
+	abline(fit,col="red")
+}
+attach(Carseats)
+regplot(Price,Seats)
+
+### Redefine the R function to take optional args
+regplot=function(x,y,...){
+        fit<-lm(x~y)
+        plot(x,y,...)
+        abline(fit,col="red")
+}
+
+regplot(Price,Sales,xlab="Price",ylab="Sales",col=blue,pch=20)
 
 
 
