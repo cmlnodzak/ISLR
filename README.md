@@ -1,3 +1,3 @@
 # ISLR
 
-Practice of the techniques in statistical learning using R.
+R code of the techniques used in statistical learning.
