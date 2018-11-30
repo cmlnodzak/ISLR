@@ -33,12 +33,32 @@ for(d in degree){
 lines(degree,cv.error10,type="b",col="red")
 
 
+### Now, implement the Bootstrap reseampling method
+### Follow minimum risk investment in section 5.2.
+
+alpha<-function(x,y){
+	vx<-var(x)
+	vy<-var(y)
+	cxy<-cov(x,y)
+	(vy-cxy)/vx+vy-2*cxy)
+}
+
+alpha(Portfolio$X,Portfolio$Y)
+
+### Find the standard error of alpha
+
+alpha.fn<-function(data,index){
+	with(data[index,],alpha(X,Y))
+}
+alpha.fn<-function(Portfolio,1:100)
+
+### bootstrap manually with sample(), then use boot().
+set.seed(1)
+alpha.fn(Portfolio,sample(1:100,100),replace=TRUE)
 
 
-
-
-
-
-
+boot.out<-boot(Portfolio,alpha.fn,R=1000)
+boot.out
+plot(boot.out)
 
 
