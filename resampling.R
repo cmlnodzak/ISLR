@@ -25,6 +25,17 @@ plot(degree,cv.error,type="b")
 
 ### 10-fold CV
 
+cv.error10<-rep(0,5)
+for(d in degree){
+	glm.fit<-glm(mpg~poly(horsepower,d),data=Auto)
+	cv.error10[d]<-cv.glm(Auto,glm.fit,K=10)$delta[1]
+}
+lines(degree,cv.error10,type="b",col="red")
+
+
+
+
+
 
 
 
