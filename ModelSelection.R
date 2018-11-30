@@ -25,6 +25,13 @@ points(10,reg.summary$cp[10],pch=20,col="red")
 plot(regfit.full,scale="Cp")
 coef(regfit.full,10)
 
+### Forward stepwise selection with regsubsets objects
+
+regfit.fwd<-regsubsets(Salary~.,data=Hitters,nvmax=19,method="forward")
+summary(regfit.fwd)
+plot(regfit.fwd,scale="Cp")
+
+
 
 
 
