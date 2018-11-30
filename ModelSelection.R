@@ -32,6 +32,33 @@ summary(regfit.fwd)
 plot(regfit.fwd,scale="Cp")
 
 
+### Model selection with a validation set
+### need to make a training and test set to choose a subset model.
+dim(Hitters)
+set.seed(1)
+train<-sample(seq(263),180,replace=FALSE)
+train
+regfit.fwd<-regsubsets(Salary~.,data=Hitters[train,],nvmax=19,method="forward")
 
+### Now we have 19 models, we can make predictions on the test set.
+### construct empty vectors to record errors.
+### Since no predict method exists for regsubsets, we will define one.
+
+val.errors<-rep(NA,19)
+x.test<-model.matrix(Salary~.,data=Hitters[-train,])
+for(i in 1:19){
+	coefi<-coef(regfit.fwd,id=i)
+	pred<-x.test[,names(coefi)]%*%coefi
+	val.errors[i]<-mean((Hitters$Salary[-train]-pred)^2)
+}
+plot(sqrt(val.errors),ylab="Root MSE",ylim=c(300,400),pch=19,type="b")
+legend("topright",legend=c("Training","Validation"),col=c("blue","black"),pch=19)
+
+predict.regsubsets<-function(object,newdata,i,...){
+	form<-as.formula(object$call[[2]])
+	mat<-model.matrix(form,newdata)
+	coefi<-coef(object,id=i)
+	mat[,names(coef)]%*%coefi
+}
 
 
