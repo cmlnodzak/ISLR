@@ -17,5 +17,27 @@ plot(age,wage,col="darkgrey")
 lines(age.grid,preds$fit,lwd-2,col="blue")
 matlines(age.grid,se.bands,col="blue",lty=2)
 
+### This can be done in a more direct way...
+
+fita<-lm(age~I(age^3)+I(age^4),data=Wage)
+summary(fita)
+
+### I() is a wrapper function, which is necessary to allow the correct operation to be interpreted by the lm function.
+### The coefficients are different from the first method, yet the fits are identical.
+
+### The orthogonal polynomials from the simple method show us that we can seperately test for each coefficient.
+### The summary of the fit shows that the linear, quadratic, and cubic terms are significant, but not the quartic.
+
+### This only works for linear regression, and if there is a single predictor, use anova().
+
+fita<-lm(wage~education,data=Wage)
+fitb<-lm(wage~education+age,data=Wage)
+fitc<-lm(wage~education+poly(age,2),data=Wage)
+fitd<-lm(wage~education+poly(age,3),data=Wage)
+anova(fita,fitb,fitc,fitd)
+
+
+
+
 
 
