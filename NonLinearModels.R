@@ -39,6 +39,21 @@ anova(fita,fitb,fitc,fitd)
 ### Polynomial logistic regression.
 ### Now, we fit a logistic regression model to a binary response variable, constructed from 'wage'. We encode big earners (>250k) as 1, else 0.
 
+fit<-glm(I(wage>250)~poly(age,3),data=Wage,family=binomial)
+summary(fit)
+preds<-predict(fit,list(age=age.grid)se=T)
+se.bands=preds$fit + cbind(fit=0,lower=-2*preds$se,upper=2*preds$se)
+se.bands[1:5,]
+
+### Now we have the computations on the logit scale. To transform we need to apply the inverse logit mapping.
+
+### p = [ e^(eta) / (1 + e^(eta) ]
+
+### We can apply this transformation simultaneously to all three of the columns in se.bands.
+
+prob.bands<-exp(se.bands)/(1+exp(se.bands))
+maplot(age.grid,prob.bands,col="blue",lwd=c(2,1,1),lty=c(1,2,2),type="l",ylim=c(0,1))
+points(jitter(age),I(wage>250)/10,pch="|",cex=0.5)
 
 
 
