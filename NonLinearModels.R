@@ -68,6 +68,7 @@ abline(v=c(25,40,60),lty=2,col="darkgreen")
 fit<-smooth.spline(age,wage,df=16)
 lines(fit,col="red",lwd=2)
 
-
+### We can use Leave-one-out cross validation to select the smoothing parameter automatically.
+fit<-smooth.spline
 
 
