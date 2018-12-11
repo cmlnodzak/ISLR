@@ -74,5 +74,21 @@ lines(fit,col="purple",lwd=2)
 fit
 
 ### Generalized Additive Models
+### At this point we have covered how to fit models with mostly single nonlinear terms.
+### The GAM package makes it easier to work with multiple nonlinear terms with additional plotting functionality built in.
 
+require(gam)
+gam1<-gam(wage~s(age,df=4)+education,data=Wage)
+plot(gam1,se=TRUE)
+gam2<-gam(I(wage>250)~s(age,df=4)+s(year,df=4)+education,data=Wage,family=binomial)
+plot(gam2)
 
+### Now, check if we need a nonlinear term for year.
+gam2a<-gam(I(wage>250)~s(age,df=4)+year+education,data=Wage,family=binomial)
+anova(gam2a,gam2,test="Chisq")
+
+### FYI the GAM package plot function can handle fits from lm() and glm() shown below.
+
+par(mfrow=c(1,3))
+lm1<-lm(wage~ns(age,df=4)+ns(year,df=4)+education,data=Wage)
+plot.gam(lm1,se=T)
