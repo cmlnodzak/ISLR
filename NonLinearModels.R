@@ -69,6 +69,10 @@ fit<-smooth.spline(age,wage,df=16)
 lines(fit,col="red",lwd=2)
 
 ### We can use Leave-one-out cross validation to select the smoothing parameter automatically.
-fit<-smooth.spline
+fit<-smooth.spline(age,wage,cv=TRUE)
+lines(fit,col="purple",lwd=2)
+fit
+
+### Generalized Additive Models
 
 
