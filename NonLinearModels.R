@@ -36,6 +36,8 @@ fitc<-lm(wage~education+poly(age,2),data=Wage)
 fitd<-lm(wage~education+poly(age,3),data=Wage)
 anova(fita,fitb,fitc,fitd)
 
+### Polynomial logistic regression.
+### Now, we fit a logistic regression model to a binary response variable, constructed from 'wage'. We encode big earners (>250k) as 1, else 0.
 
 
 
