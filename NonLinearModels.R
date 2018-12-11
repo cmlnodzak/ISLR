@@ -55,6 +55,19 @@ prob.bands<-exp(se.bands)/(1+exp(se.bands))
 maplot(age.grid,prob.bands,col="blue",lwd=c(2,1,1),lty=c(1,2,2),type="l",ylim=c(0,1))
 points(jitter(age),I(wage>250)/10,pch="|",cex=0.5)
 
+### Splines are more flexible than polynomials, but the idea is rather similar. Here we explore cubic splines.
+
+require(splines)
+fit<-lm(wage~bs(age,knots=c(25,40,60)),date=Wage)
+plot(age,wage,col="darkgrey")
+lines(age.grid,predict(fit,list(age=age.grid)),col="darkgreen",lwd=2)
+abline(v=c(25,40,60),lty=2,col="darkgreen")
+
+### The smoothing splines does not require knot selection, but it does have a smoothing parameter, which can be specified by the effective degrees of freedom.
+
+fit<-smooth.spline(age,wage,df=16)
+lines(fit,col="red",lwd=2)
+
 
 
 
