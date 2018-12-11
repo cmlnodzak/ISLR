@@ -30,4 +30,22 @@ tree.pred<-predict(tree.carseats,Carseats[-train,]type="class")
 with(Carseats[-train,],table(tree.pred,High))
 (72+33)/150
 
+### The tree was created and grown to full depth here, which makes it vulnerable to overfitting. To combat this we can prune it with cross validation.
+
+cv.carseats<-cv.tree(tree.carseats,FUN=prune.misclass)
+cv.carseats
+plot(cv.carseats)
+prune.carseats<-prine.misclass(tree.carseats,best=13)
+plot(prune.carseats)
+text(prune.carseats,pretty=0)
+
+### Now we can evaluate the pruned tree on the test set.
+
+tree.pred<-predict(prune.carseats,Carseats[-train,]type="class")
+with(Carseats[-train,]table(tree.pred,High))
+
+### The pruned tree did about as well as the unpruned model. This can be interpreted as the pruned tree did not hurt the clasifcation with respect to the misclassification errors, but it did provide a simpler tree.
+
+
+
 
