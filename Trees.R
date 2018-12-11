@@ -87,3 +87,30 @@ legend("topright",legend=c("OOB","Test"),pch=19,col=c("red,blue"))
 
 ### Fairly simple to implement. The test-curve dropped below the OOB curve, because they are estimates based on the availbale data, each with their own standard errors.
 ### Notice that when mtry=13, this corresponds to bagging.
+
+### Boosting builds a lot of small tree. Unlike random forests, each new tree in boosting tried to patch up the deficiencies of the current ensemble.
+
+require(gbm)
+boost.boston<-gbm(medv~.,data=Boston[train,],distribution="gaussian",n.tree=10000,shrinkage=0.01,interaction.depth=4)
+summary(boost.boston)
+plot(boost.boston,i="lstat")
+plot(boost.boston,i="rm")
+
+### Now we can attempt to make a prediction on the test set.
+### With Boosting, the number of trees is a tuning parameter, where too many trees can lead to overfitting.
+### To overcome this, we use cross validation to select the number of trees.
+### First, we compute the test error as a function of the number of trees and plot the result.
+
+ntrees<-seq(from=100,to=10000,by=100)
+predmat<-predict(boost.boston,newdata=Boston[-train,],n.trees=n.trees)
+dim(predmat)
+berr<-with(Boston[-train,],apply((predmat-medv)^2,2,mean))
+plot(n.trees,berr,pch=19,ylab="Mean Squared Error",xlab="Number Trees",main="Boosting Test Error")
+abline(h=min(test.err),col="red")
+
+
+
+
+
+
+
