@@ -48,4 +48,42 @@ with(Carseats[-train,]table(tree.pred,High))
 
 
 
+### Random Forests and Boosting
+### These methods use trees as building blocks to build more complex models.
+### Here we will use the Bosting housing data to explore random forests and boosting.
+### The data is from the "MASS" package and provides 1970 housig and census data for the 506 suburbs of Boston.
 
+### Random forests build lots of bushy trees, and the average them to reduce their variance.
+
+require(randomForest)
+require(MASS)
+set.seed(101)
+dim(Boston)
+train<-sample(1:nrow(Boston),300)
+?Boston
+
+### Now we will fit a random forest and see how well it performs. We use the response variable of "medv", or median housing value.
+
+rf.boston<-randomForest(medv~.,data=Boston,subset=train)
+rf.boston
+
+
+### The MSR and % variance explained are based on the out of bag estimates (OOB).
+### OOB is a device in random forests to get honest error estimates. 
+### The model reports that "mtry=4", which is the number of variables randomly chosen at each split.
+### Since p=13, we could try all possible 13 values of "mtry" and plot below. 
+
+oob.err<-double(13)
+test.err<-double(13)
+for(mtry in 1:13){
+	fit<-randomForest(medv~.,data=Boston,subset=train,mtry=mtry,ntree=400)
+	oob.err[mtry]<-fit$mse[400]
+	pred<-predict(fit,Boston[-train])
+	test.err[mtry]<-with(Boston[-train],mead((medv-pred)^2))
+	cat(mtry," ")
+}
+matplot(1:mtry,cbind(test.err,oob.err)pch=19,col="red","blue"),type="b",ylab="Mean Squared Error")
+legend("topright",legend=c("OOB","Test"),pch=19,col=c("red,blue"))
+
+### Fairly simple to implement. The test-curve dropped below the OOB curve, because they are estimates based on the availbale data, each with their own standard errors.
+### Notice that when mtry=13, this corresponds to bagging.
