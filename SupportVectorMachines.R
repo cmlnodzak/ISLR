@@ -32,4 +32,17 @@ make.grid<-function(x,n=75){
 	x2<-seq(from=grange[1,2],to=grange[2,2],length=n)
 	expand.grid(X1=x1,X2=x2)
 }
+xgrid<-make.grid(x)
+ygrid<-predict(svmfit,xgrid)
+plot(xgrid,col=c("red","blue")[as.numeric(ygrid)],pch=20,cex=0.2)
+points(x,col=y+3,pch=19)
+points(x[svmfit$index,],pch=5,cex=2)
+
+### The SVM function is difficult, in that manual work needs to be done in order to obtain the linear coefficients. Likely, because it only makes sense for linear kernels.
+### Here, we will use a formula to extract these coefficients.
+### Below, extract the linear coefficients and use simple alegebra to include th decision boundary and the two margins.
+
+beta<-drop(t(svmfit$coefs)%*%x[svmfit$index,])
+
+
 
