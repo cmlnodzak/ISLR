@@ -43,6 +43,36 @@ points(x[svmfit$index,],pch=5,cex=2)
 ### Below, extract the linear coefficients and use simple alegebra to include th decision boundary and the two margins.
 
 beta<-drop(t(svmfit$coefs)%*%x[svmfit$index,])
+beta0<-svmfit$rho
+plot(xgrid,col=c("red","blue")[as.numeric,(ygrid)],pch=20,cex=0.2)
+points(x[svmfit$index,],pch=5,cex=2)
+abline((beta0-1)/beta[2],-beta[1]/beta[2],lty=2)
+abline((beta0+1)/beta[2],-beta[1]/beta2,lty=2)
+
+### Just like the other models in the ISLR book, the tuning parameter "C" must be selected.
+### Different values will provide different solutions.
+### Rerun the code with cross-validation to optimize this parameter.
+
+### Nonlinear SVM
+### Now, we will implement the support vector machine with a nonlinear boundary on the mixture dataset from ESL.
+
+load(url("http://www.stanford.edu/~hastie/ElemStatLearn.datasets/ESL.mixture.rda"))
+names(ESL.mixture)
+rm(x,y)
+attach(ESL.mixture)
+
+### These data are two-dimensional. Plot them and fit a nonlinear SVM with a radial kernel.
+
+plot(x,col=y+1)
+dat<-data.frame(y=factor(y),x)
+fit<-svm(factor(y)~.,data=dat,scale=FALSE,kernel="radial",cost=5)
+
+
+
+
+
+
+
 
 
 
