@@ -35,6 +35,30 @@ points(x,col=which,pch=1
 points(x,col=c(4,3,2,1)[which],pch=19)
 
 
+### Hierarchichal clustering
+### Now we will use the same data as above but with the hierarchical clustering method.
+### method refers to differences in linkage rule, distance is euclidean.
+
+hc.complete<-hclust(dist(x),method="complete")
+plot(hc.complete)
+hc.single<-hclust(dist(x),method="single")
+plot(hc.single)
+hc.average<-hclust(dist(x),method="average")
+plot(hc.average)
+
+### We can then compare the hierarchical clustering method with the actual clusters in the data.
+### The function "cutree" can be used to cut the tree at level four.
+### This returns a vector of numbers from 1 to 4, saying which branch each observation belongs to.
+### The "table" function can tell us how well they match.
+
+hc.cut<-cutree(hc.complete,4)
+table(hc.cut,which)
+table(hc.cut,km.cluster$cluster)
+
+plot(hc.complete,labels=which)
+
+
+
 
 
 
